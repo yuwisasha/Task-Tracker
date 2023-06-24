@@ -6,6 +6,7 @@ from pydantic import BaseModel
 class TaskBase(BaseModel):
     title: str | None = None
     description: str | None = None
+    deadline: datetime | None = None
 
 
 class TaskCreate(TaskBase):
@@ -19,7 +20,6 @@ class TaskUpdate(TaskBase):
 
 class TaskInDBBase(TaskBase):
     id: int
-    title: str
 
     class Config:
         orm_mode = True
