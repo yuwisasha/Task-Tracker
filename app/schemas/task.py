@@ -2,8 +2,6 @@ from datetime import datetime
 
 from pydantic import BaseModel
 
-from app.models.user import User
-
 
 class TaskBase(BaseModel):
     title: str | None = None
@@ -16,20 +14,19 @@ class TaskCreate(TaskBase):
 
 
 class TaskUpdate(TaskBase):
-    pass
+    deadline: datetime
 
 
 class TaskInDBBase(TaskBase):
     id: int
     title: str
-    performers: list[User]
 
     class Config:
         orm_mode = True
 
 
 class Task(TaskInDBBase):
-    deadline: datetime
+    pass
 
 
 class TaskInDB(TaskInDBBase):

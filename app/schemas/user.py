@@ -1,7 +1,5 @@
 from pydantic import BaseModel, EmailStr
 
-from app.models.task import Task
-
 
 class UserBase(BaseModel):
     email: EmailStr | None = None
@@ -25,7 +23,7 @@ class UserInDBBase(UserBase):
 
 
 class User(UserInDBBase):
-    tasks: list[Task]
+    pass
 
 
 class UserInDB(UserInDBBase):

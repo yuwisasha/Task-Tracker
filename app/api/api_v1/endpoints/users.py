@@ -23,7 +23,7 @@ async def read_users(
     return users
 
 
-@router.post("/", response_model=models.User)
+@router.post("/", response_model=schemas.User)
 async def create_user(
     *,
     db: AsyncSession = Depends(deps.get_db),
