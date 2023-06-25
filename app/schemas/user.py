@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from pydantic import BaseModel, EmailStr
 
 
@@ -13,6 +15,7 @@ class UserCreate(UserBase):
 
 class UserUpdate(UserBase):
     password: str | None = None
+    tasks: list[TaskBase] | None = None
 
 
 class UserInDBBase(UserBase):
@@ -28,3 +31,6 @@ class User(UserInDBBase):
 
 class UserInDB(UserInDBBase):
     hashed_password: str
+
+from .task import TaskBase  # noqa
+UserUpdate.update_forward_refs()

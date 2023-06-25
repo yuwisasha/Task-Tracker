@@ -15,7 +15,7 @@ async def task_list(
     skip: int = 0,
     limit: int = 100,
 ) -> Any:
-    tasks = await crud.task.get_multi(skip=skip, limit=limit)
+    tasks = await crud.task.get_multi(db, skip=skip, limit=limit)
     return tasks
 
 

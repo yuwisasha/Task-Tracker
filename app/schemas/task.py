@@ -1,3 +1,4 @@
+from __future__ import annotations
 from datetime import datetime
 
 from pydantic import BaseModel
@@ -12,6 +13,17 @@ class TaskBase(BaseModel):
 class TaskCreate(TaskBase):
     title: str
     description: str
+    performers: list[UserBase] | None = None
+
+    class Config:
+        orm_mode = True
+        schema_extra = {
+            "example": {
+                "title": "Task title",
+                "description": "Task description",
+                "deadline": ""
+            }
+        }
 
 
 class TaskUpdate(TaskBase):
@@ -31,3 +43,7 @@ class Task(TaskInDBBase):
 
 class TaskInDB(TaskInDBBase):
     pass
+
+
+from .user import UserBase  # noqa
+TaskCreate.update_forward_refs()
