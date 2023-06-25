@@ -17,9 +17,10 @@ class User(Base):
         String(40), unique=True, index=True, nullable=False
     )
     name: Mapped[str] = mapped_column(String(40))
+    hashed_password: Mapped[str] = mapped_column(nullable=False)
+
     tasks = relationship(
         "Task",
         secondary=association_table,
         back_populates="performers",
     )
-    hashed_password: Mapped[str] = mapped_column(nullable=False)

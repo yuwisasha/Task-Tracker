@@ -13,7 +13,7 @@ class TaskBase(BaseModel):
 class TaskCreate(TaskBase):
     title: str
     description: str
-    performers: list[UserBase] | None = None
+    performers: list[User] | None = None
 
     class Config:
         orm_mode = True
@@ -21,7 +21,14 @@ class TaskCreate(TaskBase):
             "example": {
                 "title": "Task title",
                 "description": "Task description",
-                "deadline": ""
+                "deadline": "2023-06-25 15:31:44",
+                "performers": [
+                    {
+                        "id": 0,
+                        "email": "user@example.com",
+                        "name": "user",
+                    }
+                ]
             }
         }
 
@@ -45,5 +52,5 @@ class TaskInDB(TaskInDBBase):
     pass
 
 
-from .user import UserBase  # noqa
+from .user import User  # noqa
 TaskCreate.update_forward_refs()

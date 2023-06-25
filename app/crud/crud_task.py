@@ -15,14 +15,15 @@ class CRUDTask(CRUDBase[Task, TaskCreate, TaskUpdate]):
         obj_in_data["deadline"] = datetime.strptime(
             obj_in_data["deadline"], "%Y-%m-%dT%H:%M:%S"
         )
-        performers_data = obj_in_data.pop("performers")
-        db_obj = self.model(**obj_in_data)
+        db_obj = self.model(
+            title=obj_in_data["title"],
+            description=obj_in_data["description"],
+            deadline=obj_in_data["deadline"],
+            performers=obj_in_data["performers"],
+        )
         db.add(db_obj)
         await db.commit()
         await db.refresh(db_obj)
-        task_id = db_obj.id
-        for performer in performers_data:
-            pass
         return db_obj
 
     async def get_multi_by_performer(

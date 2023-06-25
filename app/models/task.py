@@ -17,6 +17,7 @@ class Task(Base):
     title: Mapped[str] = mapped_column(String(40))
     description: Mapped[str]
     deadline: Mapped[datetime]
+
     performers = relationship(
         "User",
         secondary=association_table,
