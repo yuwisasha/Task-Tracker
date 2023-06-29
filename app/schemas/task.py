@@ -24,11 +24,11 @@ class TaskCreate(TaskBase):
                 "deadline": "2023-06-25 15:31:44",
                 "performers": [
                     {
-                        "id": 0,
+                        "id": 1,
                         "email": "user@example.com",
-                        "name": "user",
+                        "name": "string",
                     }
-                ]
+                ],
             }
         }
 
@@ -53,4 +53,5 @@ class TaskInDB(TaskInDBBase):
 
 
 from .user import User  # noqa
+
 TaskCreate.update_forward_refs()

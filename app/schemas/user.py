@@ -15,7 +15,7 @@ class UserCreate(UserBase):
 
 class UserUpdate(UserBase):
     password: str | None = None
-    # TODO tasks: list[Task] | None = None
+    tasks: list[Task] | None = None
 
 
 class UserInDBBase(UserBase):
@@ -26,13 +26,13 @@ class UserInDBBase(UserBase):
 
 
 class User(UserInDBBase):
-    # TODO tasks: list[Task] | None = None
     pass
 
 
 class UserInDB(UserInDBBase):
     hashed_password: str
 
+
 from .task import Task  # noqa
+
 UserUpdate.update_forward_refs()
-# TODO User.update_forward_refs()

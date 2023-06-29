@@ -1,26 +1,23 @@
-from datetime import datetime
-
-from fastapi.encoders import jsonable_encoder
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
 from app.crud.base import CRUDBase
 from app.models.task import Task
+from app.models.user import User
 from app.schemas.task import TaskCreate, TaskUpdate
 
 
 class CRUDTask(CRUDBase[Task, TaskCreate, TaskUpdate]):
     async def create(self, db: AsyncSession, obj_in: TaskCreate) -> Task:
-        obj_in_data = jsonable_encoder(obj_in)
-        obj_in_data["deadline"] = datetime.strptime(
-            obj_in_data["deadline"], "%Y-%m-%dT%H:%M:%S"
+        db_obj = Task(
+            title=obj_in.title,
+            description=obj_in.description,
+            deadline=obj_in.deadline,
         )
-        db_obj = self.model(
-            title=obj_in_data["title"],
-            description=obj_in_data["description"],
-            deadline=obj_in_data["deadline"],
-            performers=obj_in_data["performers"],
-        )
+        for performer in obj_in.performers:
+            stmt = select(User).where(User.id == performer.id)
+            performer = await db.execute(stmt)
+            db_obj.performers.append(performer.scalar_one_or_none())
         db.add(db_obj)
         await db.commit()
         await db.refresh(db_obj)
@@ -36,12 +33,13 @@ class CRUDTask(CRUDBase[Task, TaskCreate, TaskUpdate]):
     ) -> list[Task]:
         stmt = (
             select(self.model)
-            .filter(self.model.performers == performer_id)
+            .where(self.model.performers.any(User.id == performer_id))
             .offset(skip)
             .limit(limit)
         )
+        print(self.model.performers)
         result = await db.execute(stmt)
-        return result
+        return result.scalars().all()
 
 
 task = CRUDTask(Task)

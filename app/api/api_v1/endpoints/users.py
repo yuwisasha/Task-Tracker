@@ -86,7 +86,7 @@ async def update_user_by_id(
     *,
     db: AsyncSession = Depends(deps.get_db),
     user_id: int,
-    user_in: schemas.User,
+    user_in: schemas.UserUpdate,
     current_user: models.User = Depends(deps.get_current_user),
 ) -> Any:
     user = await crud.user.get(db, id=user_id)

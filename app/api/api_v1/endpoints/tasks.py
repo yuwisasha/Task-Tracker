@@ -1,6 +1,7 @@
 from typing import Any
+from datetime import datetime
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Body
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app import crud, models, schemas
@@ -26,7 +27,12 @@ async def task_list_by_user_id(
     user_id: int,
     current_user: models.User = Depends(deps.get_current_user),
 ) -> Any:
-    tasks = await crud.task.get_multi_by_performer(performer_id=user_id)
+    user = await crud.user.get(db, id=user_id)
+    if not user:
+        raise HTTPException(
+            status_code=400, detail="User with this id doesn`t exist."
+        )
+    tasks = await crud.task.get_multi_by_performer(db, performer_id=user_id)
     return tasks
 
 
@@ -34,10 +40,25 @@ async def task_list_by_user_id(
 async def create_task(
     *,
     db: AsyncSession = Depends(deps.get_db),
-    task_in: schemas.TaskCreate,
-    # current_user: models.User = Depends(deps.get_current_user),
+    title: str = Body(...),
+    description: str = Body(...),
+    deadline: datetime = Body(None),
+    performers: list[schemas.User] = Body(None, embed=True),
+    current_user: models.User = Depends(deps.get_current_user),
 ) -> Any:
-    task = await crud.task.create(db, obj_in=task_in)
+    for perfomer in performers:
+        user = await crud.user.get(db, id=perfomer.id)
+        if not user:
+            raise HTTPException(
+                status_code=400, detail="One of performers doesn`t exist."
+            )
+    task_in = schemas.TaskCreate(
+        title=title,
+        description=description,
+        deadline=deadline,
+        performers=performers,
+    )
+    task = await crud.task.create(db=db, obj_in=task_in)
     return task
 
 
@@ -46,8 +67,8 @@ async def update_task_by_id(
     *,
     db: AsyncSession = Depends(deps.get_db),
     task_id: int,
-    task_in: schemas.Task,
-    current_user: models.User = Depends(deps.get_current_user),
+    task_in: schemas.TaskUpdate,
+    # current_user: models.User = Depends(deps.get_current_user),
 ) -> Any:
     task = await crud.task.get(db, id=task_id)
     if not task:
