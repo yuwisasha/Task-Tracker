@@ -14,6 +14,7 @@ class CRUDTask(CRUDBase[Task, TaskCreate, TaskUpdate]):
             description=obj_in.description,
             deadline=obj_in.deadline,
         )
+        print(obj_in.deadline, type(obj_in.deadline))
         for performer in obj_in.performers:
             stmt = select(User).where(User.id == performer.id)
             performer = await db.execute(stmt)

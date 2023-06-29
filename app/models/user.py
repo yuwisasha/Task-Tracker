@@ -7,6 +7,7 @@ from sqlalchemy.orm import mapped_column, relationship
 from app.db.base import Base
 from app.models.user_task import association_table
 
+# Avoid circular import
 if TYPE_CHECKING:
     from .task import Task  # noqa
 
