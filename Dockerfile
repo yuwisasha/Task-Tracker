@@ -12,6 +12,6 @@ RUN curl -sSL https://install.python-poetry.org | POETRY_HOME=/etc/poetry python
 
 COPY pyproject.toml poetry.lock /app/
 
-RUN bash -c "poetry install --no-dev"
+RUN bash -c "poetry install --no-root"
 
 COPY . /app

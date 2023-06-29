@@ -17,7 +17,9 @@ class Task(Base):
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
     title: Mapped[str] = mapped_column(String(40))
     description: Mapped[str]
-    deadline: Mapped[datetime] = mapped_column(DateTime(timezone=True), )
+    deadline: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+    )
 
     performers = relationship(
         "User",

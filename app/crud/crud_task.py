@@ -14,11 +14,11 @@ class CRUDTask(CRUDBase[Task, TaskCreate, TaskUpdate]):
             description=obj_in.description,
             deadline=obj_in.deadline,
         )
-        print(obj_in.deadline, type(obj_in.deadline))
-        for performer in obj_in.performers:
-            stmt = select(User).where(User.id == performer.id)
-            performer = await db.execute(stmt)
-            db_obj.performers.append(performer.scalar_one_or_none())
+        if obj_in.performers:
+            for performer in obj_in.performers:
+                stmt = select(User).where(User.id == performer.id)
+                performer = await db.execute(stmt)
+                db_obj.performers.append(performer.scalar_one_or_none())
         db.add(db_obj)
         await db.commit()
         await db.refresh(db_obj)

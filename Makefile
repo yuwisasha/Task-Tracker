@@ -8,3 +8,5 @@ migration:
 	alembic revision --autogenerate -m "Initial"
 migrate:
 	alembic upgrade head
+test:
+	poetry run pytest -v
