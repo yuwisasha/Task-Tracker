@@ -18,7 +18,7 @@ class CRUDTask(CRUDBase[Task, TaskCreate, TaskUpdate]):
             for performer in obj_in.performers:
                 stmt = select(User).where(User.id == performer.id)
                 performer = await db.execute(stmt)
-                db_obj.performers.append(performer.scalar_one_or_none())
+                db_obj.performers.append(performer.scalar_one())
         db.add(db_obj)
         await db.commit()
         await db.refresh(db_obj)

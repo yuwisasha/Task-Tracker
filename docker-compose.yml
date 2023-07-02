@@ -18,5 +18,10 @@ services:
     container_name: db
     env_file:
       - .env
+    volumes:
+      - pg-data:/var/lib/postgresql/data
     ports:
       - 8080:8080
+
+volumes:
+  pg-data:

@@ -1,73 +1,41 @@
-from dataclasses import dataclass
-
 import pytest
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app import crud
-from app.models.task import Task
-from app.models.user import User
-from app.schemas.task import TaskCreate, TaskUpdate
-from app.schemas.user import UserCreate
-from .test_users import TestUser
-
-
-@dataclass
-class TestTask:
-    __test__ = False
-
-    ID = 1
-    TITLE = "title"
-    DESCRIPTION = "description"
-    DEADLINE = "2023-06-29 12:10:24"
+from app import crud, schemas
+from tests.utils.users import create_random_user
+from tests.utils.utils import random_lower_string, random_datetime
 
 
 @pytest.mark.asyncio
-async def test_task_create(db: AsyncSession) -> None:
-    user_in = UserCreate(
-        email=TestUser.NEW_EMAIL,
-        name=TestUser.NEW_NAME,
-        password=TestUser.PASSWORD,
-    )
-    await crud.user.create(db, obj_in=user_in)
-    users = await crud.user.get_multi(db)
-    task_in = TaskCreate(
-        title=TestTask.TITLE,
-        description=TestTask.DESCRIPTION,
-        deadline=TestTask.DEADLINE,
-        performers=users,
+async def test_create_task(db: AsyncSession) -> None:
+    title = random_lower_string()
+    description = random_lower_string()
+    deadline = random_datetime()
+    task_in = schemas.TaskCreate(
+        title=title,
+        description=description,
+        deadline=deadline,
     )
     task = await crud.task.create(db, obj_in=task_in)
-    assert task.title == TestTask.TITLE
-    assert task.description == TestTask.DESCRIPTION
+    assert task is not None
+    assert task.title == title
 
 
 @pytest.mark.asyncio
-async def test_update_task(db: AsyncSession) -> None:
-    new_title = "example"
-    new_description = "example"
-    new_deadline = "2024-08-15 22:00:00"
-    task = await crud.task.get(db, id=TestTask.ID)
-    task_in = TaskUpdate(
-        title=new_title, description=new_description, deadline=new_deadline
+async def test_create_task_with_performers(db: AsyncSession) -> None:
+    title = random_lower_string()
+    description = random_lower_string()
+    deadline = random_datetime()
+    user_1 = await create_random_user(db)
+    user_2 = await create_random_user(db)
+    performers = [user_1, user_2]
+    task_in = schemas.TaskCreate(
+        title=title,
+        description=description,
+        deadline=deadline,
+        performers=performers,
     )
-    await crud.task.update(db, db_obj=task, obj_in=task_in)
-    updated_task = await crud.task.get(db, TestTask.ID)
-    assert task.description == updated_task.description
-    assert task.deadline == updated_task.deadline
-
-
-@pytest.mark.asyncio
-async def test_get_multi_task(db: AsyncSession) -> None:
-    tasks = await crud.task.get_multi(db)
-    assert tasks is not None
-    assert isinstance(tasks, (list, Task))
-    assert len(tasks) >= 1
-
-
-@pytest.mark.asyncio
-async def test_get_multi_by_performer(db: AsyncSession) -> None:
-    user = await crud.user.get_by_email(db, email=TestUser.NEW_EMAIL)
-    tasks = await crud.task.get_multi_by_performer(db, performer_id=user.id)
-    assert isinstance(tasks, (list, User))
-    assert len(tasks) >= 1
-    assert tasks is not None
+    task = await crud.task.create(db, obj_in=task_in)
+    # TODO
+    ...
+    

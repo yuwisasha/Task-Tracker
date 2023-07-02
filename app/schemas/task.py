@@ -23,7 +23,7 @@ class TaskCreate(TaskBase):
 
 # Receive via API on update
 class TaskUpdate(TaskBase):
-    deadline: datetime
+    deadline: datetime = None
     performers: list[User] | None = None
 
 

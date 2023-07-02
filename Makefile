@@ -1,12 +1,17 @@
-build:
+# run NOT IN container
+build:      
 	docker-compose build
-up:
+up:        
 	docker-compose up -d
-down:
+down:       
 	docker-compose down
-migration:
+%-shell:    # replace % with "app" to get app's shell or with "db" to get db's shell
+	docker-compose exec $* bash
+	
+# run IN container
+migration:  
 	alembic revision --autogenerate -m "Initial"
-migrate:
+migrate:    
 	alembic upgrade head
-test:
+test:       
 	poetry run pytest -v

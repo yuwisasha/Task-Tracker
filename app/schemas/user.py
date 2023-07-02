@@ -17,7 +17,7 @@ class UserCreate(UserBase):
 
 # Receive via API on update
 class UserUpdate(UserBase):
-    password: str | None = None
+    password: str = None
     tasks: list[Task] | None = None
 
 
