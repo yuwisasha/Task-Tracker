@@ -1,4 +1,5 @@
 # Task-Tracker
+
 Backend app, where you can create tasks for users
 ## Features
 * **[FastAPI](https://github.com/tiangolo/fastapi)** backend
@@ -14,7 +15,9 @@ Backend app, where you can create tasks for users
 * **JWT token** authentication
 
 ## How to use
-# Launch 
+
+### Launch 
+
 ```
 make up
 ```
@@ -23,7 +26,9 @@ Will pull, build and start 2 containers for application and database.
 make down
 ```
 Will stop both running containers
-# Migrations
+
+### Migrations
+
 Project has a *initial* migrations file, to apply it, need to enter an app container:
 ```
 make app-shell
@@ -41,7 +46,9 @@ If you changed the models, you can create a migration file using:
 root@d131e5ae1281:/app# make migration
 ```
 and then run it as stated earlier.
-# Tests
+
+### Tests
+
 To start tests, need to apply migrations, and after that run in container:
 ```
 root@d131e5ae1281:/app# make test
@@ -58,8 +65,14 @@ You can also start psql:
 ```
 root@b76c025c43d5:/# psql -U postgres -d app
 ```
-# Truncate db
+
+## Truncate db
+
 ```
 docker-compose down -v --remove-orphans
 ```
-If you run it in your shell, it will stop runnig containers and undo all actions, such as test data in db
+Run it in your shell, it will stop runnig containers and undo all actions, such as test data in db
+
+## Endpoints
+
+To access documentation, open **0.0.0.0:8000/docs**, you will see the automatic interactive API documentation (provided by [Swagger UI](https://swagger.io/)), or **0.0.0.0:8000/redoc**, will see the alternative automatic documentation (provided by [ReDoc](https://github.com/Redocly/redoc))
