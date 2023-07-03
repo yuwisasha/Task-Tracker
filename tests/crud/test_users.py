@@ -32,7 +32,9 @@ async def test_auth_user(db: AsyncSession) -> None:
         password=password,
     )
     user = await crud.user.create(db, obj_in=user_in)
-    auth_user = await crud.user.authenticate(db, email=email, password=password)
+    auth_user = await crud.user.authenticate(
+        db, email=email, password=password
+    )
     assert auth_user
     assert user.email == auth_user.email
 

@@ -24,4 +24,5 @@ class User(Base):
         "Task",
         secondary=association_table,
         back_populates="performers",
+        lazy="selectin",
     )

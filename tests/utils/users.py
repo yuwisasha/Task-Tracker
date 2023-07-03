@@ -19,16 +19,16 @@ async def get_auth_token_header(
         f"{settings.API_V1_STR}/login/access-token", data=login_data
     )
     token = response.json()
-    print(token)
-    access_token = token["access-token"]
+    access_token = token["access_token"]
     header = {"Authorization": f"Bearer {access_token}"}
     return header
 
 
-async def create_random_user(db: AsyncSession) -> User:
+async def create_random_user(db: AsyncSession, password: str = None) -> User:
     name = random_lower_string()
     email = random_email()
-    password = random_lower_string()
+    if password is None:
+        password = random_lower_string()
     user_in = schemas.UserCreate(
         name=name,
         email=email,

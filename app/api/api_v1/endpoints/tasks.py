@@ -46,12 +46,13 @@ async def create_task(
     performers: list[schemas.User] = Body(None, embed=True),
     current_user: models.User = Depends(deps.get_current_user),
 ) -> Any:
-    for perfomer in performers:
-        user = await crud.user.get(db, id=perfomer.id)
-        if not user:
-            raise HTTPException(
-                status_code=400, detail="One of performers doesn`t exist."
-            )
+    if performers:
+        for perfomer in performers:
+            user = await crud.user.get(db, id=perfomer.id)
+            if not user:
+                raise HTTPException(
+                    status_code=400, detail="One of performers doesn`t exist."
+                )
     task_in = schemas.TaskCreate(
         title=title,
         description=description,
@@ -76,5 +77,12 @@ async def update_task_by_id(
             status_code=404,
             detail="The task doesn't exist.",
         )
+    for performer in task_in.performers:
+        user = await crud.user.get(db, id=performer.id)
+        if not user:
+            raise HTTPException(
+                status_code=404,
+                detail="One of performers doesn't exist.",
+            )
     task = await crud.task.update(db, db_obj=task, obj_in=task_in)
     return task

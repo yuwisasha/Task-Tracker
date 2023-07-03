@@ -25,4 +25,5 @@ class Task(Base):
         "User",
         secondary=association_table,
         back_populates="tasks",
+        lazy="selectin",
     )

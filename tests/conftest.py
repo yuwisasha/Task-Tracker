@@ -27,5 +27,5 @@ async def db() -> AsyncGenerator:
 
 @pytest_asyncio.fixture(scope="module")
 async def client() -> AsyncGenerator:
-    async with AsyncClient(app=app, base_url="http://0.0.0.0:8000") as c:
-        yield c
+    async with AsyncClient(app=app, base_url="http://0.0.0.0:8000") as client:
+        yield client
