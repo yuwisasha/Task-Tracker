@@ -18,33 +18,45 @@ Backend app, where you can create tasks for users
 ```
 make up
 ```
-Will pull, build and start 2 containers for application and database
+Will pull, build and start 2 containers for application and database.
 ```
 make down
 ```
 Will stop both running containers
 # Migrations
-Project has a *initial* migrations file, to apply it, need to enter app container:
+Project has a *initial* migrations file, to apply it, need to enter an app container:
 ```
 make app-shell
 ```
+You should see an output like:
+```
+root@d131e5ae1281:/app#
+```
 and then apply migrations:
 ```
-make migrate
+root@d131e5ae1281:/app# make migrate
 ```
 If you changed the models, you can create a migration file using:
 ```
-make migration
+root@d131e5ae1281:/app# make migration
 ```
 and then run it as stated earlier.
 # Tests
 To start tests, need to apply migrations, and after that run in container:
 ```
-make test
+root@d131e5ae1281:/app# make test
 ```
 You can see results of tests in db shell (run it in your shell, not in container):
 ```
 make db-shell
+```
+You should see an output like:
+```
+root@b76c025c43d5:/#
+```
+You can also start psql:
+```
+root@b76c025c43d5:/# psql -U postgres -d app
 ```
 # Truncate db
 ```
