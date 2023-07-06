@@ -75,4 +75,72 @@ Run it in your shell, it will stop runnig containers and undo all actions, such 
 
 ## Endpoints
 
-To access documentation, open **0.0.0.0:8000/docs**, you will see the automatic interactive API documentation (provided by [Swagger UI](https://swagger.io/)), or **0.0.0.0:8000/redoc**, will see the alternative automatic documentation (provided by [ReDoc](https://github.com/Redocly/redoc))
+To access documentation, open **0.0.0.0:8000/docs**, you will see the automatic interactive API documentation (provided by [Swagger UI](https://swagger.io/)), or **0.0.0.0:8000/redoc**, will see the alternative automatic documentation (provided by [ReDoc](https://github.com/Redocly/redoc)).
+
+## Project structure 
+
+```
+.
+├── alembic.ini                     - a generic, single database configuration      
+├── app
+│   ├── api                       
+│   │   ├── api_v1                
+│   │   │   ├── api.py              - API router
+│   │   │   ├── endpoints          
+│   │   │   │   ├── __init__.py
+│   │   │   │   ├── login.py
+│   │   │   │   ├── tasks.py
+│   │   │   │   └── users.py
+│   │   │   ├── __init__.py
+│   │   ├── deps.py                 - endpoints dependencies
+│   │   ├── __init__.py
+│   ├── core
+│   │   ├── config.py               - application settings
+│   │   ├── __init__.py
+│   │   └── security.py             - JWT and password stuff
+│   ├── crud
+│   │   ├── base.py
+│   │   ├── crud_task.py
+│   │   ├── crud_user.py
+│   │   ├── __init__.py
+│   ├── db
+│   │   ├── base_class.py           - base async class for tables
+│   │   ├── base.py
+│   │   ├── __init__.py
+│   │   └── session.py              - async engine and session
+│   ├── __init__.py
+│   ├── main.py                     - application instance
+│   ├── models                      - database models
+│   │   ├── __init__.py
+│   │   ├── task.py
+│   │   ├── user.py
+│   │   └── user_task.py
+│   └── schemas                     - Pydantic schemas
+│       ├── __init__.py
+│       ├── task.py
+│       ├── token.py
+│       └── user.py
+├── migrations
+│   ├── env.py                      - migrations configuration
+│   ├── script.py.mako
+│   └── versions
+│       ├── 355a9617c26e_initial.py - initial migration
+└── tests
+    ├── api
+    │   ├── api_v1
+    │   │   ├── __init__.py
+    │   │   ├── test_tasks.py
+    │   │   └── test_users.py
+    │   ├── __init__.py
+    ├── conftest.py                 - tests fixtures
+    ├── crud
+    │   ├── __init__.py
+    │   ├── test_tasks.py
+    │   └── test_users.py
+    ├── __init__.py
+    └── utils                       - tests utilities 
+        ├── __init__.py
+        ├── tasks.py
+        ├── users.py
+        └── utils.py
+```
