@@ -18,11 +18,8 @@ reusable_oauth2 = OAuth2PasswordBearer(
 
 
 async def get_db() -> AsyncGenerator:
-    try:
-        db = AsyncSessionLocal()
+    async with AsyncSessionLocal() as db:
         yield db
-    finally:
-        await db.close()
 
 
 async def get_current_user(
